@@ -70,6 +70,7 @@ func startReactApp() {
 
 	fmt.Println("[+]Installing necessary Javascript packages in client folder...")
 	cmd := exec.Command(exeName, buildCommands.Install, cwdFlag)
+	fmt.Printf("    %v\n", cmd)
 	err = cmd.Run()
 	if err != nil {
 		fmt.Printf("Error installing and checking Javascript packages:\n%v", err)
@@ -78,14 +79,10 @@ func startReactApp() {
 
 	fmt.Println("[+] Building necessary Javascript packages in client folder...")
 	cmd = exec.Command(exeName, buildCommands.Build, cwdFlag)
+	fmt.Printf("    %v\n", cmd)
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error building Javascript packages:\n%v\nExiting...", err))
 	}
 	fmt.Println("[+] Building packages completed.")
-
-	// fmt.Println("\n[+] Serving Front End...")
-	// cmd = exec.Command("\""+p+"\"", buildCommands.Serve, cwdFlag)
-	// if err != nil {
-	// 	log.Fatal(fmt.Sprintf("Error serving Javascript packages:\n%v\nExiting...", err))
-	// }
 }

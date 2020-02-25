@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// TODO serve static files properly
 func reactAppProxy(w http.ResponseWriter, req *http.Request) {
 	if !isDevelopment {
 		resp, err := http.Get("http://localhost:3000")
