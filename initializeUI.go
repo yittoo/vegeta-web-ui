@@ -59,20 +59,24 @@ func startReactApp() {
 		}
 	}
 	fmt.Printf("\n[+]Found Javascript package bundler at: %v\n", p)
+
 	buildCommands := setupBuildCommands(isYarn, pwd)
-	fmt.Println("Installing necessary Javascript packages in client folder...")
-	fmt.Printf("\n%v\n", buildCommands.Directory)
+	// fmt.Printf("\n%v\n", buildCommands.Directory)
+
 	cwdFlag := fmt.Sprintf("--cwd=\"%v\"", buildCommands.Directory)
+	fmt.Println("Installing necessary Javascript packages in client folder...")
 	cmd := exec.Command(p, buildCommands.Install, cwdFlag)
 	err = cmd.Run()
 	if err != nil {
 		fmt.Printf("Error installing and checking Javascript packages:\n%v", err)
 	}
+
 	fmt.Println("\n[+]Building necessary Javascript packages in client folder...")
 	cmd = exec.Command(p, buildCommands.Build, cwdFlag)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error building Javascript packages:\n%v\nExiting...", err))
 	}
+
 	fmt.Println("\n[+]Serving Front End...")
 	cmd = exec.Command(p, buildCommands.Serve, cwdFlag)
 	if err != nil {
