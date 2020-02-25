@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 )
@@ -24,9 +23,8 @@ func main() {
 
 	if !isDevelopment {
 		startReactApp()
+		http.HandleFunc("/", reactAppProxy)
 	}
-	fmt.Println("Hellooo World!")
-	http.HandleFunc("/hello", hello)
-	http.HandleFunc("/headers", headers)
+	http.HandleFunc("/vegeta", vegeta)
 	http.ListenAndServe(":8000", nil)
 }
