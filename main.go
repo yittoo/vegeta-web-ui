@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 )
@@ -20,11 +21,12 @@ func init() {
 }
 
 func main() {
-
 	if !isDevelopment {
 		startReactApp()
-		http.HandleFunc("/", reactAppProxy)
 	}
+	http.HandleFunc("/", reactAppProxy)
 	http.HandleFunc("/vegeta", vegeta)
-	http.ListenAndServe(":8000", nil)
+	port := 8000
+	fmt.Printf("\n[+] Serving API at port %v", port)
+	http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
 }

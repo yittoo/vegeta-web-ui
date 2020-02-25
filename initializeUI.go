@@ -38,7 +38,6 @@ func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 	return buildCommands
 }
 
-// TODO FIX THIS BUNDLER CONNECTION NOT WORKING PROPERLY
 func startReactApp() {
 	os.Chdir("client")
 	isYarn := true
@@ -48,38 +47,45 @@ func startReactApp() {
 		log.Fatal("Error geting current working directory")
 	}
 
-	// absolute path to yarn executible
+	// absolute path to yarn executible, if it exists allow process to continue
 	p, err := exec.LookPath("yarn")
 	if err != nil {
-		isYarn = false
-		// absolute path to npm executible
+		// absolute path to npm executible, if it exists allow process to continue
 		p, err = exec.LookPath("npm")
 		if err != nil {
-			panic("You need to have either yarn or npm installed. If both are installed yarn will be preferred over")
+			log.Fatal("You need to have either yarn or npm installed. If both are installed yarn will be preferred over. Make sure they are available under PATH environment variable")
 		}
+		isYarn = false
 	}
-	fmt.Printf("\n[+]Found Javascript package bundler at: %v\n", p)
+	fmt.Printf("\n[+] Found Javascript package bundler at: %v\n", p)
 
+	exeName := "yarn"
+	if !isYarn {
+		exeName = "npm"
+	}
 	buildCommands := setupBuildCommands(isYarn, pwd)
 	// fmt.Printf("\n%v\n", buildCommands.Directory)
 
 	cwdFlag := fmt.Sprintf("--cwd=\"%v\"", buildCommands.Directory)
-	fmt.Println("Installing necessary Javascript packages in client folder...")
-	cmd := exec.Command(p, buildCommands.Install, cwdFlag)
+
+	fmt.Println("[+]Installing necessary Javascript packages in client folder...")
+	cmd := exec.Command(exeName, buildCommands.Install, cwdFlag)
 	err = cmd.Run()
 	if err != nil {
 		fmt.Printf("Error installing and checking Javascript packages:\n%v", err)
 	}
+	fmt.Println("[+] Installing packages completed.")
 
-	fmt.Println("\n[+]Building necessary Javascript packages in client folder...")
-	cmd = exec.Command(p, buildCommands.Build, cwdFlag)
+	fmt.Println("[+] Building necessary Javascript packages in client folder...")
+	cmd = exec.Command(exeName, buildCommands.Build, cwdFlag)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error building Javascript packages:\n%v\nExiting...", err))
 	}
+	fmt.Println("[+] Building packages completed.")
 
-	fmt.Println("\n[+]Serving Front End...")
-	cmd = exec.Command(p, buildCommands.Serve, cwdFlag)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Error serving Javascript packages:\n%v\nExiting...", err))
-	}
+	// fmt.Println("\n[+] Serving Front End...")
+	// cmd = exec.Command("\""+p+"\"", buildCommands.Serve, cwdFlag)
+	// if err != nil {
+	// 	log.Fatal(fmt.Sprintf("Error serving Javascript packages:\n%v\nExiting...", err))
+	// }
 }
