@@ -68,7 +68,7 @@ func startReactApp() {
 
 	cwdFlag := fmt.Sprintf("--cwd=\"%v\"", buildCommands.Directory)
 
-	fmt.Println("[+]Installing necessary Javascript packages in client folder...")
+	fmt.Println("[+] Installing necessary Javascript packages in client folder...")
 	cmd := exec.Command(exeName, buildCommands.Install, cwdFlag)
 	fmt.Printf("    %v\n", cmd)
 	err = cmd.Run()
