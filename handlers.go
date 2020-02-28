@@ -3,10 +3,21 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
+
+func mapVegetaOptions(j []byte) (map[string]string, error) {
+	v := make(map[string]string)
+	err := json.Unmarshal(j, &v)
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
+}
 
 // TODO serve static files properly
 func reactAppProxy(w http.ResponseWriter, req *http.Request) {
@@ -32,9 +43,22 @@ func reactAppProxy(w http.ResponseWriter, req *http.Request) {
 }
 
 func vegeta(w http.ResponseWriter, req *http.Request) {
-	for name, headers := range req.Header {
-		for _, h := range headers {
-			fmt.Fprintf(w, "%v: %v\n", name, h)
+	if req.Method == http.MethodPost {
+		b, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("400 - Bad Request"))
+			fmt.Println(err)
+			return
 		}
+		vo, err := mapVegetaOptions(b)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("400 - Bad Request"))
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(vo)
+		fmt.Fprint(w, string(b))
 	}
 }
