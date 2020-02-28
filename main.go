@@ -22,7 +22,7 @@ func init() {
 
 func main() {
 	if !isDevelopment {
-		startReactApp()
+		buildReactApp()
 	}
 	http.HandleFunc("/", reactAppProxy)
 	http.HandleFunc("/vegeta", vegeta)

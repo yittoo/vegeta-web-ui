@@ -38,7 +38,7 @@ func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 	return buildCommands
 }
 
-func startReactApp() {
+func buildReactApp() {
 	os.Chdir("client")
 	defer os.Chdir("..") // after this function call is over return the currentWorkingDirectory back to root
 	isYarn := true
