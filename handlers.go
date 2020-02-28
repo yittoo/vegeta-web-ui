@@ -5,19 +5,22 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 // TODO serve static files properly
 func reactAppProxy(w http.ResponseWriter, req *http.Request) {
 	if !isDevelopment {
-		resp, err := http.Get("http://localhost:3000")
+		f, err := os.Open("./client/build/index.html")
 		if err != nil {
-			fmt.Fprintf(w, "Client server is not running at the moment")
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("500 - Something bad happened"))
+			fmt.Println(err)
 			return
 		}
-		defer resp.Body.Close()
+		defer f.Close()
 
-		s := bufio.NewScanner(resp.Body)
+		s := bufio.NewScanner(f)
 		var b bytes.Buffer
 		for s.Scan() {
 			b.WriteString(s.Text())

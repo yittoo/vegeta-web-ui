@@ -26,6 +26,7 @@ func main() {
 	}
 	http.HandleFunc("/", reactAppProxy)
 	http.HandleFunc("/vegeta", vegeta)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./client/build/static"))))
 	port := 8000
 	fmt.Printf("\n[+] Serving API at port %v", port)
 	http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
