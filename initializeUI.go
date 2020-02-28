@@ -9,30 +9,25 @@ import (
 
 // DefaultCommands is a type that defines commands that should be run depending on prefered javascript bundler
 type DefaultCommands struct {
-	Build     string
-	Start     string
-	Serve     string
-	Install   string
-	Directory string
+	Build   []string
+	Start   []string
+	Install []string
 }
 
 func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 	var buildCommands DefaultCommands
 	if isYarn {
+		cwdWrapped := fmt.Sprintf("--cwd=\"%v\"", pwd)
 		buildCommands = DefaultCommands{
-			Build:     "build",
-			Start:     "start",
-			Serve:     "serve",
-			Install:   "",
-			Directory: pwd,
+			Build:   []string{"build", cwdWrapped},
+			Start:   []string{"start", cwdWrapped},
+			Install: []string{cwdWrapped},
 		}
 	} else {
 		buildCommands = DefaultCommands{
-			Build:     "run build",
-			Start:     "start",
-			Serve:     "run serve",
-			Install:   "install",
-			Directory: "",
+			Build:   []string{"run", "build"},
+			Start:   []string{"start"},
+			Install: []string{"install"},
 		}
 	}
 	return buildCommands
@@ -41,20 +36,20 @@ func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 func buildReactApp() {
 	os.Chdir("client")
 	defer os.Chdir("..") // after this function call is over return the currentWorkingDirectory back to root
-	isYarn := true
 
 	pwd, err := os.Getwd()
 	if err != nil {
 		log.Fatal("Error geting current working directory")
 	}
 
-	// absolute path to yarn executible, if it exists allow process to continue
+	isYarn := false
+	// absolute path to yarn executible, if it doesn't exist check for npm
 	p, err := exec.LookPath("yarn")
 	if err != nil {
-		// absolute path to npm executible, if it exists allow process to continue
-		p, err = exec.LookPath("npm")
+		// absolute path to npx executible, if it exists allow process to continue
+		p, err = exec.LookPath("npx")
 		if err != nil {
-			log.Fatal("You need to have either yarn or npm installed. If both are installed yarn will be preferred over. Make sure they are available under PATH environment variable")
+			log.Fatal("You need to have either yarn or npx(comes with npm) installed. If both are installed yarn will be preferred over. Make sure they are available under PATH environment variable")
 		}
 		isYarn = false
 	}
@@ -65,12 +60,11 @@ func buildReactApp() {
 		exeName = "npm"
 	}
 	buildCommands := setupBuildCommands(isYarn, pwd)
-	// fmt.Printf("\n%v\n", buildCommands.Directory)
 
-	cwdFlag := fmt.Sprintf("--cwd=\"%v\"", buildCommands.Directory)
+	var cmd *exec.Cmd
 
 	fmt.Println("[+] Installing necessary Javascript packages in client folder...")
-	cmd := exec.Command(exeName, buildCommands.Install, cwdFlag)
+	cmd = exec.Command(exeName, buildCommands.Install...)
 	fmt.Printf("    %v\n", cmd)
 	err = cmd.Run()
 	if err != nil {
@@ -79,7 +73,7 @@ func buildReactApp() {
 	fmt.Println("[+] Installing packages completed.")
 
 	fmt.Println("[+] Building necessary Javascript packages in client folder...")
-	cmd = exec.Command(exeName, buildCommands.Build, cwdFlag)
+	cmd = exec.Command(exeName, buildCommands.Build...)
 	fmt.Printf("    %v\n", cmd)
 	err = cmd.Run()
 	if err != nil {
