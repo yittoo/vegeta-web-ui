@@ -14,18 +14,6 @@ type DefaultCommands struct {
 	Install []string
 }
 
-// func New(text string) error {
-// 	return &errorString{text}
-// }
-
-// type errorString struct {
-// 	s string
-// }
-
-// func (e *errorString) Error() string {
-// 	return e.s
-// }
-
 func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 	var buildCommands DefaultCommands
 	if isYarn {
