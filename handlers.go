@@ -19,8 +19,7 @@ func mapVegetaOptions(j []byte) (map[string]string, error) {
 	return v, nil
 }
 
-// TODO serve static files properly
-func reactAppProxy(w http.ResponseWriter, req *http.Request) {
+func reactAppServe(w http.ResponseWriter, req *http.Request) {
 	if !isDevelopment {
 		f, err := os.Open("./client/build/index.html")
 		if err != nil {

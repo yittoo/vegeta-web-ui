@@ -30,7 +30,7 @@ func main() {
 		r := fmt.Sprintf("http://localhost:%v", port)
 		osx.OpenDefault(r)
 	}
-	http.HandleFunc("/", reactAppProxy)
+	http.HandleFunc("/", reactAppServe)
 	http.HandleFunc("/vegeta", vegeta)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./client/build/static"))))
 	fmt.Printf("\n[+] Serving API at port %v", port)
