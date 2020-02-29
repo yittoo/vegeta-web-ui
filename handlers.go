@@ -54,7 +54,6 @@ func vegetaHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		w.Header().Add("Content-Type", "application/json")
 		w.Write([]byte(res))
 	}
 }
