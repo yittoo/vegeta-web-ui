@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/icza/gox/osx"
 )
 
 var isDevelopment = false
@@ -21,13 +23,16 @@ func init() {
 }
 
 func main() {
+	port := 8000
+
 	if !isDevelopment {
 		buildReactApp()
+		r := fmt.Sprintf("http://localhost:%v", port)
+		osx.OpenDefault(r)
 	}
 	http.HandleFunc("/", reactAppProxy)
 	http.HandleFunc("/vegeta", vegeta)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./client/build/static"))))
-	port := 8000
 	fmt.Printf("\n[+] Serving API at port %v", port)
 	http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
 }

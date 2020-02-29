@@ -42,7 +42,7 @@ func buildReactApp() {
 		log.Fatal("Error geting current working directory")
 	}
 
-	isYarn := false
+	isYarn := true
 	// absolute path to yarn executible, if it doesn't exist check for npm
 	p, err := exec.LookPath("yarn")
 	if err != nil {
