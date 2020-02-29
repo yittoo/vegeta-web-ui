@@ -14,6 +14,18 @@ type DefaultCommands struct {
 	Install []string
 }
 
+// func New(text string) error {
+// 	return &errorString{text}
+// }
+
+// type errorString struct {
+// 	s string
+// }
+
+// func (e *errorString) Error() string {
+// 	return e.s
+// }
+
 func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 	var buildCommands DefaultCommands
 	if isYarn {
@@ -42,14 +54,26 @@ func buildReactApp() {
 		log.Fatal("Error geting current working directory")
 	}
 
+	exeName, isYarn, err := findJavascriptBundler()
+	must(err)
+	buildCommands := setupBuildCommands(isYarn, pwd)
+
+	err = installJavascriptPackages(exeName, buildCommands.Install)
+	must(err)
+	err = buildJavascriptPackages(exeName, buildCommands.Build)
+	must(err)
+}
+
+func findJavascriptBundler() (string, bool, error) {
 	isYarn := true
+
 	// absolute path to yarn executible, if it doesn't exist check for npm
 	p, err := exec.LookPath("yarn")
 	if err != nil {
 		// absolute path to npx executible, if it exists allow process to continue
 		p, err = exec.LookPath("npx")
 		if err != nil {
-			log.Fatal("You need to have either yarn or npx(comes with npm) installed. If both are installed yarn will be preferred over. Make sure they are available under PATH environment variable")
+			return "", isYarn, fmt.Errorf("You need to have either yarn or npx(comes with npm) installed. If both are installed yarn will be preferred over. Make sure they are available under PATH environment variable")
 		}
 		isYarn = false
 	}
@@ -59,25 +83,35 @@ func buildReactApp() {
 	if !isYarn {
 		exeName = "npm"
 	}
-	buildCommands := setupBuildCommands(isYarn, pwd)
+	return exeName, isYarn, nil
+}
 
-	var cmd *exec.Cmd
-
+func installJavascriptPackages(exeName string, flags []string) error {
 	fmt.Println("[+] Installing necessary Javascript packages in client folder...")
-	cmd = exec.Command(exeName, buildCommands.Install...)
+	cmd := exec.Command(exeName, flags...)
 	fmt.Printf("    %v\n", cmd)
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
-		fmt.Printf("Error installing and checking Javascript packages:\n%v", err)
+		return fmt.Errorf("Error installing and checking Javascript packages:\n%v", err)
 	}
 	fmt.Println("[+] Installing packages completed.")
+	return nil
+}
 
+func buildJavascriptPackages(exeName string, flags []string) error {
 	fmt.Println("[+] Building necessary Javascript packages in client folder...")
-	cmd = exec.Command(exeName, buildCommands.Build...)
+	cmd := exec.Command(exeName, flags...)
 	fmt.Printf("    %v\n", cmd)
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Error building Javascript packages:\n%v\nExiting...", err))
+		return fmt.Errorf("error building Javascript packages:\n%v\nExiting", err)
 	}
 	fmt.Println("[+] Building packages completed.")
+	return nil
+}
+
+func must(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
