@@ -3,24 +3,13 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 )
 
-func mapVegetaOptions(j []byte) (map[string]string, error) {
-	v := make(map[string]string)
-	err := json.Unmarshal(j, &v)
-	if err != nil {
-		return nil, err
-	}
-	return v, nil
-}
-
-// TODO serve static files properly
-func reactAppProxy(w http.ResponseWriter, req *http.Request) {
+func reactAppServe(w http.ResponseWriter, req *http.Request) {
 	if !isDevelopment {
 		f, err := os.Open("./client/build/index.html")
 		if err != nil {
@@ -42,7 +31,7 @@ func reactAppProxy(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func vegeta(w http.ResponseWriter, req *http.Request) {
+func vegetaHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodPost {
 		b, err := ioutil.ReadAll(req.Body)
 		if err != nil {
@@ -53,12 +42,19 @@ func vegeta(w http.ResponseWriter, req *http.Request) {
 		}
 		vo, err := mapVegetaOptions(b)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("400 - Bad Request"))
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(vo)
-		fmt.Fprint(w, string(b))
+		res, ct, err := execVegetaCall(vo)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("400 - Bad Request"))
+			fmt.Println(err)
+			return
+		}
+		w.Header().Add("Content-Type", ct)
+		w.Write([]byte(res))
 	}
 }
