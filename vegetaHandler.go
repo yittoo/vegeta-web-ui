@@ -8,6 +8,7 @@ import (
 	"time"
 
 	vegeta "github.com/tsenart/vegeta/lib"
+	vegetaPlot "github.com/tsenart/vegeta/lib/plot"
 )
 
 /*
@@ -16,17 +17,21 @@ import (
 	duration: String. the duration of requests. default "5"
 	method: String. method of requests. possible options: "GET", "POST"
 	target: String. the target url that will be load tested. REQUIRED
+	reportType: String. type of expected result. possible options: "graph", "json". Default: "json"
 */
 var options = struct {
 	freq     string
 	duration string
 	method   string
 	target   string
+
+	reportType string
 }{
-	freq:     "freq",
-	duration: "duration",
-	method:   "method",
-	target:   "target",
+	freq:       "freq",
+	duration:   "duration",
+	method:     "method",
+	target:     "target",
+	reportType: "reportType",
 }
 
 func mapVegetaOptions(j []byte) (map[string]string, error) {
@@ -73,16 +78,37 @@ func execVegetaCall(o map[string]string) (string, error) {
 		URL:    target,
 	})
 	attacker := vegeta.NewAttacker()
-
-	var metrics vegeta.Metrics
-	for res := range attacker.Attack(targeter, rate, duration, "Wololo!") {
-		metrics.Add(res)
-	}
-	metrics.Close()
-
-	jsonReporter := vegeta.NewJSONReporter(&metrics)
+	var reporter vegeta.Reporter
 	var bf bytes.Buffer
-	err = jsonReporter.Report(&bf)
+
+	reportType, err := checkMapKeyExists(&o, options.reportType)
+	if err != nil {
+		// default to json
+		reportType = "json"
+	}
+
+	if reportType == "json" {
+		var metrics vegeta.Metrics
+		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
+			metrics.Add(res)
+		}
+		metrics.Close()
+		reporter = vegeta.NewJSONReporter(&metrics)
+		err = reporter.Report(&bf)
+		if err != nil {
+			return "", err
+		}
+	} else if reportType == "graph" {
+		plot := vegetaPlot.New()
+		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
+			plot.Add(res)
+		}
+		plot.Close()
+		_, err = plot.WriteTo(&bf)
+		if err != nil {
+			return "", err
+		}
+	}
 
 	return bf.String(), nil
 }

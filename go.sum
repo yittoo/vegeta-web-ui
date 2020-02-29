@@ -4,6 +4,7 @@ github.com/c2h5oh/datasize v0.0.0-20200112174442-28bbd4740fee h1:BnPxIde0gjtTnc9
 github.com/c2h5oh/datasize v0.0.0-20200112174442-28bbd4740fee/go.mod h1:S/7n9copUssQ56c7aAgHqftWO4LTf4xY6CGWt8Bc+3M=
 github.com/dgryski/go-gk v0.0.0-20140819190930-201884a44051 h1:ByJUvQYyTtNNCVfYNM48q6uYUT4fAlN0wNmd3th4BSo=
 github.com/dgryski/go-gk v0.0.0-20140819190930-201884a44051/go.mod h1:qm+vckxRlDt0aOla0RYJJVeqHZlWfOm2UIxHaqPB46E=
+github.com/google/go-cmp v0.2.0 h1:+dTQ8DZQJz0Mb/HjFlkptS1FeQ4cWSnN941F8aEG4SQ=
 github.com/google/go-cmp v0.2.0/go.mod h1:oXzfMopK8JAjlY9xF4vHSVASa0yLyX7SntLO5aqRK0M=
 github.com/icza/gox v0.0.0-20200225130741-b24ac7855005 h1:XTNdijWzcfVCDdRx3/mQwtLc6PfAIxtf1T32pvMJWb8=
 github.com/icza/gox v0.0.0-20200225130741-b24ac7855005/go.mod h1:VbcN86fRkkUMPX2ufM85Um8zFndLZswoIW1eYtpAcVk=
