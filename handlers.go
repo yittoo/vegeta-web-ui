@@ -47,13 +47,14 @@ func vegetaHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		res, err := execVegetaCall(vo)
+		res, ct, err := execVegetaCall(vo)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("400 - Bad Request"))
 			fmt.Println(err)
 			return
 		}
+		w.Header().Add("Content-Type", ct)
 		w.Write([]byte(res))
 	}
 }

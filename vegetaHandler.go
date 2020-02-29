@@ -43,14 +43,14 @@ func mapVegetaOptions(j []byte) (map[string]string, error) {
 	return v, nil
 }
 
-func execVegetaCall(o map[string]string) (string, error) {
+func execVegetaCall(o map[string]string) (string, string, error) {
 	freqAsStr, err := checkMapKeyExists(&o, options.freq)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	freq, err := strconv.Atoi(freqAsStr)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	rate := vegeta.Rate{Freq: freq, Per: time.Second}
 
@@ -70,7 +70,7 @@ func execVegetaCall(o map[string]string) (string, error) {
 
 	target, err := checkMapKeyExists(&o, options.target)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
@@ -80,6 +80,7 @@ func execVegetaCall(o map[string]string) (string, error) {
 	attacker := vegeta.NewAttacker()
 	var reporter vegeta.Reporter
 	var bf bytes.Buffer
+	var contentType string
 
 	reportType, err := checkMapKeyExists(&o, options.reportType)
 	if err != nil {
@@ -88,6 +89,7 @@ func execVegetaCall(o map[string]string) (string, error) {
 	}
 
 	if reportType == "json" {
+		contentType = "application/json"
 		var metrics vegeta.Metrics
 		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
 			metrics.Add(res)
@@ -96,9 +98,10 @@ func execVegetaCall(o map[string]string) (string, error) {
 		reporter = vegeta.NewJSONReporter(&metrics)
 		err = reporter.Report(&bf)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 	} else if reportType == "graph" {
+		contentType = "text/html"
 		plot := vegetaPlot.New()
 		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
 			plot.Add(res)
@@ -106,11 +109,11 @@ func execVegetaCall(o map[string]string) (string, error) {
 		plot.Close()
 		_, err = plot.WriteTo(&bf)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 	}
 
-	return bf.String(), nil
+	return bf.String(), contentType, nil
 }
 
 func checkMapKeyExists(options *map[string]string, key string) (string, error) {
