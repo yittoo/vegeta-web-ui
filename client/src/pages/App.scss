@@ -1,0 +1,40 @@
+@import "../styles/variables";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  font-family: inherit;
+}
+
+a:link,
+a:active,
+a:visited {
+  color: inherit;
+  text-decoration: inherit;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+  font-weight: 400;
+}
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  color: $dark-color-1;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
