@@ -1,0 +1,31 @@
+.Drawer {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+
+.Panel {
+}
+
+.LeftPanel {
+}
+
+.RightPanel {
+  flex: 1;
+}
+
+.Splitter {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  width: 20px;
+  border: 1px solid red;
+  cursor: col-resize;
+  span {
+    width: 1px;
+    background-color: #777;
+  }
+  .Thick {
+    width: 2px;
+  }
+}
