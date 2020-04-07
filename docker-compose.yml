@@ -1,7 +1,26 @@
 version: "3"
 services:
   app:
-    build: .
+    image: "alpine"
     ports:
       - "8000:8000"
     restart: on-failure
+    depends_on:
+      - frontend
+      - backend
+    working_dir: /app
+    volumes:
+      - ./client/build:/app/client/build
+      - ./:/app
+    command: ls
+  frontend:
+    build:
+      dockerfile: "Dockerfile"
+      context: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+  backend:
+    build: .
+    volumes:
+      - ./:/app
