@@ -1,0 +1,12 @@
+@import "../../styles/variables";
+
+.Row {
+  display: flex;
+  > * {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.Col {
+}

@@ -9,6 +9,7 @@ import (
 )
 
 var isDevelopment = false
+var isInsideDocker = false
 
 func init() {
 	args := os.Args
@@ -18,6 +19,9 @@ func init() {
 		case "dev":
 			isDevelopment = true
 			break
+		case "dockermode":
+			isInsideDocker = true
+			break
 		}
 	}
 }
@@ -25,7 +29,7 @@ func init() {
 func main() {
 	port := 8000
 
-	if !isDevelopment {
+	if !isDevelopment && !isInsideDocker {
 		buildReactApp()
 		r := fmt.Sprintf("http://localhost:%v", port)
 		osx.OpenDefault(r)

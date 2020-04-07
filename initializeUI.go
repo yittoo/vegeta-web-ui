@@ -34,7 +34,11 @@ func setupBuildCommands(isYarn bool, pwd string) DefaultCommands {
 }
 
 func buildReactApp() {
-	os.Chdir("client")
+	err := os.Chdir("client")
+	if err != nil {
+		fmt.Printf("\n[+] Client folder not found, skipping javascript build process. If you are running through Docker, this is perfectly fine as client will build in the next container.\n")
+		return
+	}
 	defer os.Chdir("..") // after this function call is over return the currentWorkingDirectory back to root
 
 	pwd, err := os.Getwd()
