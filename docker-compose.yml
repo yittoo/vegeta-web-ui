@@ -10,17 +10,20 @@ services:
       - backend
     working_dir: /app
     volumes:
-      - ./client/build:/app/client/build
-      - ./:/app
-    command: ls
+      - built_html:/app/client/build
+      - go_executible:/app
+    command: ./main dockermode
   frontend:
     build:
       dockerfile: "Dockerfile"
       context: ./client
     volumes:
-      - ./client:/app
-      - /app/node_modules
+      - built_html:/app/build
   backend:
     build: .
     volumes:
-      - ./:/app
+      - go_executible:/app
+
+volumes:
+  go_executible:
+  built_html:
