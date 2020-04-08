@@ -27,7 +27,9 @@ func reactAppServe(w http.ResponseWriter, req *http.Request) {
 		}
 		fmt.Fprintf(w, b.String())
 	} else {
-		fmt.Fprintf(w, "This is development env, please view React app itself directly for debugging")
+		http.Redirect(w, req, "http://localhost:3000", http.StatusSeeOther)
+		fmt.Printf("\n[+] This is development env, please view React app itself directly for debugging\n")
+		fmt.Printf("[+] Redirecting to http://localhost:3000\n")
 	}
 }
 
