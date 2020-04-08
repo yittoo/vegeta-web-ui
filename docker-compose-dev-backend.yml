@@ -1,0 +1,10 @@
+version: "3"
+services:
+  backend:
+    tty: true
+    stdin_open: true
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: .
+    ports:
+      - 8000:8000
