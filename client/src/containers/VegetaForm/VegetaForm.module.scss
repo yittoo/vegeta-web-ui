@@ -1,12 +1,19 @@
 @import "../../styles/variables";
 
-.Row {
-  display: flex;
-  > * {
-    padding-left: 10px;
-    padding-right: 10px;
+.Section {
+  padding: 10px;
+}
+.Form {
+  > *:not(:last-child) {
+    margin-bottom: 10px;
   }
 }
 
-.Col {
+.Select {
+  width: 100%;
+}
+
+.Submit {
+  width: 100%;
+  margin-top: 20px;
 }

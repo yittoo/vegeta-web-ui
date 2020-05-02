@@ -13,6 +13,7 @@ import (
 
 /*
 	BODY KEYS
+	attack_name: String. Name of the attack
 	freq: String. the frequency of requests per second. REQUIRED
 	duration: String. the duration of requests. default "5"
 	method: String. method of requests. possible options: "GET", "POST"
@@ -20,18 +21,27 @@ import (
 	reportType: String. type of expected result. possible options: "graph", "json". Default: "json"
 */
 var options = struct {
-	freq     string
-	duration string
-	method   string
-	target   string
+	attackName string
+	freq       string
+	duration   string
+	method     string
+	target     string
 
 	reportType string
 }{
+	attackName: "attackName",
 	freq:       "freq",
 	duration:   "duration",
 	method:     "method",
 	target:     "target",
 	reportType: "reportType",
+}
+
+// SuccessResult is struct definition for sending json and graph responses together
+type SuccessResult struct {
+	AsGraphHTML  string
+	AsGraphJSON  string
+	TimeOfAttack int64
 }
 
 func mapVegetaOptions(j []byte) (map[string]string, error) {
@@ -44,6 +54,13 @@ func mapVegetaOptions(j []byte) (map[string]string, error) {
 }
 
 func execVegetaCall(o map[string]string) (string, string, error) {
+	timeOfAttack := time.Now().Unix()
+	nameAsStr, err := checkMapKeyExists(&o, options.attackName)
+	if err != nil {
+		// default the name to Boom
+		nameAsStr = "Boom"
+	}
+
 	freqAsStr, err := checkMapKeyExists(&o, options.freq)
 	if err != nil {
 		return "", "", err
@@ -79,41 +96,48 @@ func execVegetaCall(o map[string]string) (string, string, error) {
 	})
 	attacker := vegeta.NewAttacker()
 	var reporter vegeta.Reporter
-	var bf bytes.Buffer
-	var contentType string
 
-	reportType, err := checkMapKeyExists(&o, options.reportType)
+	/* both together */
+	contentType := "application/json"
+	var jsonBuffer bytes.Buffer
+	var graphBuffer bytes.Buffer
+
+	var metrics vegeta.Metrics
+	plot := vegetaPlot.New()
+
+	for res := range attacker.Attack(targeter, rate, duration, nameAsStr) {
+		metrics.Add(res)
+		plot.Add(res)
+	}
+	metrics.Close()
+	plot.Close()
+
+	reporter = vegeta.NewJSONReporter(&metrics)
+
+	err = reporter.Report(&jsonBuffer)
 	if err != nil {
-		// default to json
-		reportType = "json"
+		return "", "", err
+	}
+	_, err = plot.WriteTo(&graphBuffer)
+	if err != nil {
+		return "", "", err
 	}
 
-	if reportType == "json" {
-		contentType = "application/json"
-		var metrics vegeta.Metrics
-		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
-			metrics.Add(res)
-		}
-		metrics.Close()
-		reporter = vegeta.NewJSONReporter(&metrics)
-		err = reporter.Report(&bf)
-		if err != nil {
-			return "", "", err
-		}
-	} else if reportType == "graph" {
-		contentType = "text/html"
-		plot := vegetaPlot.New()
-		for res := range attacker.Attack(targeter, rate, duration, "Boom") {
-			plot.Add(res)
-		}
-		plot.Close()
-		_, err = plot.WriteTo(&bf)
-		if err != nil {
-			return "", "", err
-		}
+	// convert responses into struct
+	sr := SuccessResult{
+		AsGraphHTML:  graphBuffer.String(),
+		AsGraphJSON:  jsonBuffer.String(),
+		TimeOfAttack: timeOfAttack,
 	}
 
-	return bf.String(), contentType, nil
+	// serialize struct into json
+	s, err := json.Marshal(sr)
+	if err != nil {
+		return "", "", err
+	}
+	/***/
+
+	return string(s), contentType, nil
 }
 
 func checkMapKeyExists(options *map[string]string, key string) (string, error) {

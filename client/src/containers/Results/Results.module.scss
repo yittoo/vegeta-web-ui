@@ -1,0 +1,19 @@
+.Results {
+  height: 100%;
+  :global {
+    .ant-tabs-top {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .ant-tabs-content {
+      height: 100%;
+    }
+  }
+}
+
+.Graph {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #eeeeee;
+}

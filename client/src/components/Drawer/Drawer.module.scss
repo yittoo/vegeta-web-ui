@@ -18,12 +18,12 @@
   display: flex;
   justify-content: space-around;
   align-items: stretch;
-  width: 20px;
-  border: 1px solid red;
+  width: 14px;
+  border: 1px solid #cccccc;
   cursor: col-resize;
   span {
     width: 1px;
-    background-color: #777;
+    background-color: #cccccc;
   }
   .Thick {
     width: 2px;
