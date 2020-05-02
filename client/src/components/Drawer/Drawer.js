@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import s from "./Drawer.module.scss";
 
-export const Drawer = props => {
+export const Drawer = (props) => {
   const [beforeDragClientX, setBeforeDragClientX] = useState(0);
   const [beforeDragLeftWidth, setBeforeDragLeftWidth] = useState(
     props.originalFromLeft
@@ -10,12 +10,12 @@ export const Drawer = props => {
     props.originalFromLeft
   );
 
-  const onDrag = e => {
+  const onDrag = (e) => {
     if (e.clientX > 0)
       setCurrentLeftWidth(e.clientX - beforeDragClientX + beforeDragLeftWidth);
   };
 
-  const onDragStart = e => {
+  const onDragStart = (e) => {
     setBeforeDragLeftWidth(currentLeftWidth);
     setBeforeDragClientX(e.clientX);
   };
