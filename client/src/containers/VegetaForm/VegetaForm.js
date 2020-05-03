@@ -85,13 +85,14 @@ export class VegetaForm extends Component {
     return (
       <section className={s.Section}>
         <Row align="stretch" justify="center" className={s.Form}>
+          <h3 className={s.NewTestTitle}>New Test</h3>
           <Col span={24}>
             <Input
               value={attackName.value}
               onChange={(e) =>
                 this.onChangeHandler("attackName", e.target.value)
               }
-              placeholder="Name of attack, default: Boom"
+              placeholder="Name of test, default: Boom"
             />
           </Col>
           <Col span={24}>
