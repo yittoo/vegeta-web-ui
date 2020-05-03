@@ -1,106 +1,107 @@
+@import "../variables";
 .ant-btn:hover,
 .ant-btn:focus {
-  color: var(--primary-color);
-  background-color: var(--white-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  background-color: $white-color;
+  border-color: $primary-color;
 }
 .ant-btn:active,
 .ant-btn.active {
-  color: var(--primary-color-dark);
-  background-color: var(--white-color);
-  border-color: var(--primary-color-dark);
+  color: $primary-color-dark;
+  background-color: $white-color;
+  border-color: $primary-color-dark;
 }
 .ant-btn-primary {
-  color: var(--white-color);
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: $white-color;
+  background-color: $primary-color;
+  border-color: $primary-color;
 }
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  color: var(--primary-color);
-  background-color: var(--white-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  background-color: $white-color;
+  border-color: $primary-color;
 }
 .ant-btn-primary:active,
 .ant-btn-primary.active {
-  color: var(--white-color);
-  background-color: var(--primary-color-dark);
-  border-color: var(--primary-color-dark);
+  color: $white-color;
+  background-color: $primary-color-dark;
+  border-color: $primary-color-dark;
 }
 .ant-btn-group .ant-btn-primary:not(:first-child):not(:last-child) {
-  border-right-color: var(--primary-color);
-  border-left-color: var(--primary-color);
+  border-right-color: $primary-color;
+  border-left-color: $primary-color;
 }
 .ant-btn-group .ant-btn-primary:first-child:not(:last-child) {
-  border-right-color: var(--primary-color);
+  border-right-color: $primary-color;
 }
 .ant-btn-group .ant-btn-primary:last-child:not(:first-child),
 .ant-btn-group .ant-btn-primary + .ant-btn-primary {
-  border-left-color: var(--primary-color);
+  border-left-color: $primary-color;
 }
 .ant-btn-ghost:hover,
 .ant-btn-ghost:focus {
-  color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  border-color: $primary-color;
 }
 .ant-btn-ghost:active,
 .ant-btn-ghost.active {
-  color: var(--primary-color-dark);
-  border-color: var(--primary-color-dark);
+  color: $primary-color-dark;
+  border-color: $primary-color-dark;
 }
 .ant-btn-dashed:hover,
 .ant-btn-dashed:focus {
-  color: var(--primary-color);
-  background-color: var(--white-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  background-color: $white-color;
+  border-color: $primary-color;
 }
 .ant-btn-dashed:active,
 .ant-btn-dashed.active {
-  color: var(--primary-color-dark);
-  background-color: var(--white-color);
-  border-color: var(--primary-color-dark);
+  color: $primary-color-dark;
+  background-color: $white-color;
+  border-color: $primary-color-dark;
 }
 .ant-btn-link {
-  color: var(--primary-color);
+  color: $primary-color;
 }
 .ant-btn-link:hover,
 .ant-btn-link:focus {
-  color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  border-color: $primary-color;
 }
 
 .ant-btn-link:active,
 .ant-btn-link.active {
-  color: var(--primary-color-dark);
-  border-color: var(--primary-color-dark);
+  color: $primary-color-dark;
+  border-color: $primary-color-dark;
 }
 .ant-btn-background-ghost.ant-btn-primary {
-  color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  border-color: $primary-color;
 }
 
 .ant-btn-background-ghost.ant-btn-primary:hover,
 .ant-btn-background-ghost.ant-btn-primary:focus {
-  color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: $primary-color;
+  border-color: $primary-color;
 }
 .ant-btn-background-ghost.ant-btn-primary:active,
 .ant-btn-background-ghost.ant-btn-primary.active {
-  color: var(--primary-color-dark);
-  border-color: var(--primary-color-dark);
+  color: $primary-color-dark;
+  border-color: $primary-color-dark;
 }
 
 .ant-btn-background-ghost.ant-btn-link {
-  color: var(--primary-color);
-  color: var(--white-color);
+  color: $primary-color;
+  color: $white-color;
 }
 
 .ant-btn-background-ghost.ant-btn-link:hover,
 .ant-btn-background-ghost.ant-btn-link:focus {
-  color: var(--primary-color);
+  color: $primary-color;
 }
 
 .ant-btn-background-ghost.ant-btn-link:active,
 .ant-btn-background-ghost.ant-btn-link.active {
-  color: var(--primary-color-dark);
+  color: $primary-color-dark;
 }

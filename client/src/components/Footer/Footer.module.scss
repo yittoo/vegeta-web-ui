@@ -1,2 +1,20 @@
+@import "../../styles/variables";
 .Footer {
+  letter-spacing: 1px;
+  font-size: 1.2rem;
+  text-align: center;
+  h3,
+  h5 {
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+}
+
+.SourceLink {
+  &:link,
+  &:active,
+  &:visited {
+    color: $primary-color;
+    text-decoration: underline;
+  }
 }

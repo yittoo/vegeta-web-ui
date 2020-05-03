@@ -1,21 +1,30 @@
 @import "../variables";
+
+.ant-select.ant-select-single .ant-select-selector {
+  border-color: $primary-color-light;
+  box-shadow: none !important;
+}
+.ant-select.ant-select-single:hover .ant-select-selector,
+.ant-select.ant-select-focused.ant-select-single .ant-select-selector {
+  border-color: $primary-color;
+}
 .ant-select-selection {
-  outline-color: var(--primary-color);
+  outline-color: $primary-color;
 }
 
 .ant-select-selection:hover {
-  border-color: var(--primary-color);
+  border-color: $primary-color;
 }
 .ant-select-focused .ant-select-selection,
 .ant-select-selection:focus,
 .ant-select-selection:active {
-  border-color: var(--primary-color);
+  border-color: $primary-color;
   -webkit-box-shadow: 0 0 0 2px rgba($primary-color-light, 0.2);
   box-shadow: 0 0 0 2px rgba($primary-color-light, 0.2);
 }
 
 .ant-select-open .ant-select-selection {
-  border-color: var(--primary-color);
+  border-color: $primary-color;
 }
 .ant-select-dropdown.ant-select-dropdown--multiple
   .ant-select-dropdown-menu-item-selected
@@ -23,5 +32,18 @@
 .ant-select-dropdown.ant-select-dropdown--multiple
   .ant-select-dropdown-menu-item-selected:hover
   .ant-select-selected-icon {
-  color: var(--primary-color);
+  color: $primary-color;
+}
+
+.ant-select-focused.ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector {
+  outline-color: $primary-color;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: $primary-color-light;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: $secondary-color-light;
 }
