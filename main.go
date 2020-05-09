@@ -10,12 +10,16 @@ import (
 
 var isDevelopment = false
 var isInsideDocker = false
+var isClientBuild = false
 
 func init() {
 	args := os.Args
 	// add all possible runtime arguments here
 	for _, v := range args {
 		switch v {
+		case "buildClient":
+			isClientBuild = true
+			break
 		case "dev":
 			isDevelopment = true
 			break
@@ -29,8 +33,10 @@ func init() {
 func main() {
 	port := 8000
 
-	if !isDevelopment && !isInsideDocker {
+	if isClientBuild {
 		buildReactApp()
+	}
+	if !isDevelopment && !isInsideDocker {
 		r := fmt.Sprintf("http://localhost:%v", port)
 		osx.OpenDefault(r)
 	}
