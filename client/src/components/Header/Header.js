@@ -13,7 +13,7 @@ export class Header extends React.Component {
         <Row align="middle" justify="space-between" gutter={20}>
           <Col>
             <Row align="middle" gutter={20}>
-              <Col>
+              <Col flex="none">
                 <img src={Gopher} />
               </Col>
               <Col>
@@ -34,9 +34,9 @@ export class Header extends React.Component {
               </Col>
             </Row>
           </Col>
-          <Col>
+          <Col flex="none">
             <p className={s.OptionsTitle}>View results as</p>
-            <Row align="middle" gutter={10}>
+            <Row align="middle" gutter={15}>
               <Col>
                 <p className={s.OptionsText}>Table comparison</p>
               </Col>

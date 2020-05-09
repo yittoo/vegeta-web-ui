@@ -1,0 +1,33 @@
+@import "../../styles/variables";
+
+.Table {
+  height: 100%;
+}
+.EmptyResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 50px 0;
+  &__Text {
+    width: 100%;
+    text-align: center;
+    color: $primary-color;
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  &__Icon {
+    display: block;
+    fill: $primary-color;
+    font-size: 4rem;
+    animation: rotateAround 4s linear infinite;
+  }
+}
+@keyframes rotateAround {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
