@@ -10,23 +10,28 @@ export class VegetaForm extends Component {
       formData: {
         attackName: {
           name: "attackName",
-          value: "attack",
+          value: undefined,
+          warnRequired: false,
         },
         target: {
           name: "target",
-          value: "https://sozerdesign.com",
+          value: undefined,
+          warnRequired: false,
         },
         method: {
           name: "method",
-          value: "GET",
+          value: undefined,
+          warnRequired: false,
         },
         duration: {
           name: "duration",
-          value: "1",
+          value: undefined,
+          warnRequired: false,
         },
         frequency: {
           name: "freq",
-          value: "5",
+          value: undefined,
+          warnRequired: false,
         },
       },
       pendingResult: false,
@@ -44,15 +49,47 @@ export class VegetaForm extends Component {
         ...this.state.formData,
         [key]: {
           ...this.state.formData[key],
+          warnRequired: false,
           value,
         },
       },
     });
   };
 
+  validateFields = () => {
+    const { formData } = this.state;
+    let isValid = true;
+
+    if (!formData.attackName.value) {
+      isValid = false;
+      formData.attackName.warnRequired = true;
+    }
+    if (!formData.target.value || !formData.target.value.startsWith("http")) {
+      isValid = false;
+      formData.target.warnRequired = true;
+    }
+    if (!formData.method.value) {
+      isValid = false;
+      formData.method.warnRequired = true;
+    }
+    if (!formData.duration.value || +formData.duration.value < 1) {
+      isValid = false;
+      formData.duration.warnRequired = true;
+    }
+    if (!formData.frequency.value || +formData.frequency.value < 1) {
+      isValid = false;
+      formData.frequency.warnRequired = true;
+    }
+
+    return isValid;
+  };
+
   onSubmit = () => {
     const { formData } = this.state;
     let body = {};
+
+    const isValid = this.validateFields();
+    if (!isValid) return;
 
     Object.keys(formData).forEach((key) => {
       body[formData[key].name] = formData[key].value;
@@ -92,7 +129,7 @@ export class VegetaForm extends Component {
               onChange={(e) =>
                 this.onChangeHandler("attackName", e.target.value)
               }
-              placeholder="Name of test, default: Boom"
+              placeholder="Name of test, ex: Test MySite.com"
             />
           </Col>
           <Col span={24}>
