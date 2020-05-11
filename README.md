@@ -8,7 +8,7 @@
   <img src="https://raw.githubusercontent.com/yittoo/vegeta-web-ui/master/client/src/assets/gopher.png"></img>
 </p>
 
-<h3>Installation:</h3>
+<h3>Installation Options:</h3>
 
 - <a href="#install_option_1">Direct bundled installation (Recommended for non-techy users)</a>
 - <a href="#install_option_2">With Docker (recommended for people with experience in Command Line Interface)</a>
@@ -33,8 +33,13 @@ Warning this might cause trouble on AntiViruses as the software is not signed. S
 
 <h4 id="install_option_3">By bundling directly:</h4>
 
+- Install Node 12.x and Yarn ^1.19 from
+- Install Go ^1.14 and do default configuration
 - On project directory run:
-<code>go run . buildClient</code>
+<code>
+go mod download
+
+go run . buildClient</code>
 - It will build and automatically prompt open browser http://localhost:8000 and serve the application there
 
 <h3>Contribution:</h3>
